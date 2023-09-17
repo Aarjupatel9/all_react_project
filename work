@@ -1,0 +1,78 @@
+
+
+CREATE TABLE forms (
+  form_id int  NOT NULL,
+  title varchar(50) NOT NULL,
+  formSchema varchar(2500) NOT NULL,
+  created_on varchar(30) NOT NULL
+);
+
+INSERT INTO forms (form_id, title, formSchema, created_on) VALUES
+(10, 'feedback form 1', '[{\"type\":\"header\",\"subtype\":\"h1\",\"label\":\"police feedback form\",\"className\":\"text-center\"},{\"type\":\"paragraph\",\"subtype\":\"p\",\"label\":\"please fill these form to give your valuable feedback&amp;nbsp;\"},{\"type\":\"text\",\"subtype\":\"email\",\"required\":true,\"label\":\"Email\",\"placeholder\":\"Enter your email\",\"className\":\"form-control\",\"name\":\"email\"},{\"type\":\"text\",\"required\":false,\"label\":\"first name\",\"placeholder\":\"Enter your first name\",\"className\":\"form-control\",\"name\":\"fname\",\"subtype\":\"text\"},{\"type\":\"text\",\"required\":false,\"label\":\"Last name\",\"placeholder\":\"Enter your last name\",\"className\":\"form-control\",\"name\":\"lname\",\"subtype\":\"text\"},{\"type\":\"number\",\"required\":false,\"label\":\"Mobile no.\",\"placeholder\":\"Enter your mobile number\",\"className\":\"form-control\",\"name\":\"mob_no\"},{\"type\":\"text\",\"required\":false,\"label\":\"police station name\",\"placeholder\":\"Enter your city name\",\"className\":\"form-control\",\"name\":\"police-station-name\",\"subtype\":\"text\"},{\"type\":\"number\",\"required\":false,\"label\":\"Zip code\",\"placeholder\":\"Enter your zip code\",\"className\":\"form-control\",\"name\":\"zip\"},{\"type\":\"text\",\"required\":false,\"label\":\"Text Field\",\"placeholder\":\"write your valuable feedback\",\"className\":\"form-control\",\"name\":\"text-1663611834052-0\",\"subtype\":\"text\"},{\"type\":\"button\",\"subtype\":\"submit\",\"label\":\"Subscribe\",\"className\":\"btn-success btn form-control\",\"name\":\"button\",\"style\":\"success\"}]', 'Mon, 19 Sep 2022 23:49:09 GMT');
+
+select * from forms;
+
+CREATE TABLE users_details (
+  firstname varchar(50) DEFAULT NULL,
+  lastname varchar(50) DEFAULT NULL,
+  address varchar(50) DEFAULT NULL,
+  pincode int DEFAULT NULL,
+  email varchar(50) NOT NULL,
+  phonenumber bigint NOT NULL,
+  user_key int NOT NULL
+	);
+	
+	
+	INSERT INTO users_details (firstname, lastname, address, pincode, email, phonenumber, user_key) VALUES
+('aarju', 'patel', 'bhanvad, dwarka , gujarat', 360510, 'travelagency3111@gmail.com', 6353884460, 10000001);
+
+
+
+CREATE TABLE form_response (
+  form_id int NOT NULL,
+  user_key int NOT NULL,
+  response_id int NOT NULL,
+  Email varchar(50) DEFAULT NULL,
+  Mobno bigint DEFAULT NULL,
+  sub_district varchar(50) NOT NULL,
+  district varchar(50) NOT NULL,
+  ZIP int DEFAULT NULL,
+  police_station_name varchar(100) NOT NULL,
+  response_time date NOT NULL ,
+  feedback varchar(1000) NOT NULL
+);
+
+
+
+INSERT INTO form_response (form_id, user_key, response_id, Email, Mobno, sub_district, district, ZIP, police_station_name, response_time, feedback) VALUES
+(10, 10000001, 7, 'aarjupatel922003@gmail.com', NULL, 'bhanvad', 'dwarka', 360510, 'bhanvad police station', '2022-07-17', 'need to lot of improvement in public safty');
+
+
+
+ALTER TABLE forms
+  ADD PRIMARY KEY (form_id);
+
+ALTER TABLE form_response
+  ADD PRIMARY KEY (response_id);
+
+
+ALTER TABLE users_details
+  ADD PRIMARY KEY (user_key);
+  
+  
+-- ALTER TABLE forms
+--   MODIFY `form_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+
+-- ALTER TABLE `form_response`
+--   MODIFY `response_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+
+-- ALTER TABLE `users_details`
+--   MODIFY `user_key` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10000009;
+-- COMMIT;
+  
+  
+  
+  
+  

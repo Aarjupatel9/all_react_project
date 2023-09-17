@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>File Upload</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #progressBarContainer {
+            background-color: whitesmoke;
+            visibility: hidden;
+        }
+        #massegeBarContainer {
+            visibility: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('./component/navbar') %>
+        <div class="container text-center">
+            <h1>File Upload</h1>
+
+            <form class="my-3 py-3" id="uploadForm" enctype="multipart/form-data">
+                <input class="btn  btn-lg" type="file" name="file" id="fileInput" />
+                <button class="btn btn-primary btn-lg" type="submit">Upload</button>
+            </form>
+
+            <div id="progressBarContainer" class="">
+                <div id="progressBar" class="p-3 my-2 text-white"> </div>
+            </div>
+
+            <div id="massegeBarContainer">
+                <div id="massegeBar" class="p-3 my-2 bg-dark text-white"> </div>
+            </div>
+            <h1>Network Bandwidth Detection</h1>
+            <div id="bandwidthResult"></div>
+            <div id="locationResult"></div>
+
+        </div>
+
+        <script>
+            const bandwidthResult = document.getElementById('bandwidthResult');
+            const locationResult = document.getElementById('locationResult');
+
+            // Check if the navigator.connection API is available
+            if (navigator.connection) {
+                const connectionType = navigator.connection.effectiveType;
+                const downlinkSpeed = navigator.connection.downlink;
+                // const geolocation = navigator.geolocation.getCurrentPosition();
+
+                bandwidthResult.innerHTML = `Connection Type: ${connectionType}<br>`;
+                bandwidthResult.innerHTML += `Downlink Speed: ${downlinkSpeed} Mbps<br>`;
+                // bandwidthResult.innerHTML = `Connection Type: ${geolocation}<br>`;
+
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const latitude = position.coords.latitude;
+                            const longitude = position.coords.longitude;
+
+                            locationResult.innerHTML = `Latitude: ${latitude}<br>`;
+                            locationResult.innerHTML += `Longitude: ${longitude}`;
+                        },
+                        (error) => {
+                            locationResult.innerHTML = `Error: ${error.message}`;
+                        }
+                    );
+                } else {
+                    locationResult.innerHTML = 'Geolocation not supported.';
+                }
+
+            } else {
+                bandwidthResult.innerHTML = 'Network information not available.';
+            }
+        </script>
+
+        <script>
+            const form = document.getElementById('uploadForm');
+            const fileInput = document.getElementById('fileInput');
+            const progressBar = document.getElementById('progressBar');
+            const massegeBar = document.getElementById('massegeBar');
+            const progressBarContainer = document.getElementById('progressBarContainer');
+            const massegeBarContainer = document.getElementById('massegeBarContainer');
+
+            fileInput.addEventListener('input', () => {
+                progressBarContainer.style.visibility = 'hidden';
+                massegeBarContainer.style.visibility = "hidden";
+
+                massegeBar.innerText = "";
+            });
+
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '/upload', true);
+                xhr.upload.addEventListener('progress', (event) => {
+                    if (event.lengthComputable) {
+                        progressBarContainer.style.visibility = "visible";
+                        const percent = (event.loaded / event.total) * 100;
+                        const perWidth = 5 * percent;
+                        progressBar.style.width = `${percent}%`;
+                        progressBar.innerText = `${percent.toPrecision(4)}%`;
+                        progressBar.className = `bg-primary my-2 p-3`;
+                        console.log(percent);
+                    } else {
+                        progressBarContainer.style.visibility = "hidden";
+                    }
+                    // console.log(event.lengthComputable);
+
+                });
+
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            console.log(xhr.responseText);
+                            // Handle the server response here\
+                            massegeBarContainer.style.visibility = "visible";
+                            massegeBar.innerText = xhr.responseText;
+                        } else {
+                            console.error('Error:', xhr.status);
+                            massegeBar.innerText = xhr.status;
+
+                            // Handle the error here
+                        }
+                    }
+                };
+
+                xhr.send(formData);
+            });
+        </script>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>File List</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <%- include('./component/navbar') %>
+        <div class="container">
+
+            <div class="h1 text-center">Availabe Files</div>
+            <div class="mt-3">
+                <% files.forEach((file)=> { %>
+                    <li class="h3 my-4">
+                        <a href="/uploads/<%= file %>">
+                            <%= file %>
+                        </a>
+                    </li>
+                    <% }); %>
+            </div>
+        </div>
+</body>
+
+</html>
